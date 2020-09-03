@@ -1,15 +1,18 @@
-/* Rainbow across an RGB LED, with Sine Method
- * 
+/* Rainbow across an RGB LED, with Sine Method, on/off with button.
+ *
  * Sine Method adapted from:
  * https://www.instructables.com/id/How-to-Make-Proper-Rainbow-and-Random-Colors-With-/
  */
 
 #include <Arduino.h>
 
+#define BUTTON_PIN 2
 #define RED_PIN 3
 #define GREEN_PIN 5
 #define BLUE_PIN 6
 #define FADE_DELAY 10
+
+bool lightOn = true;
 
 const uint8_t lights[360] = 
 {
@@ -69,16 +72,26 @@ void setRGB(uint8_t red, uint8_t green, uint8_t blue)
 
 void sineLED(int angle)
 {
-  setRGB(lights[(angle+120)%360], lights[angle], lights[(angle+240)%360]);
+  if (lightOn)
+  {
+    setRGB(lights[(angle+120)%360], lights[angle], lights[(angle+240)%360]);
+  }
+  else
+  {
+    setRGB(0, 0, 0);
+  }
 }
 
 void setup()
 {
+  //Serial.begin(9600);
+
   // Turn off builtin LED
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, LOW);
 
   // Initialize Pins
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
   pinMode(RED_PIN, OUTPUT);
   pinMode(GREEN_PIN, OUTPUT);
   pinMode(BLUE_PIN, OUTPUT);
@@ -90,6 +103,11 @@ void setup()
 void loop() {
   for (int i=0; i<360; i++)
   {
+    //Serial.print(i);
+    if (digitalRead(BUTTON_PIN) == LOW)
+    { 
+      lightOn = !lightOn;
+    }
     sineLED(i);
     delay(FADE_DELAY);
   }
