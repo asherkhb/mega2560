@@ -3,6 +3,13 @@
 hello_world/.vscode
 hello_world/.gitignore
 
+RGB_LED/.gitignore
+RGB_LED/.travis.yml
+RGB_LED/.vscode/
+RGB_LED/include/
+RGB_LED/lib/
+RGB_LED/test/
+
 # From PlatformIO
 
 .pio
