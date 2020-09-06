@@ -10,6 +10,12 @@ RGB_LED/include/
 RGB_LED/lib/
 RGB_LED/test/
 
+buzz/.gitignore
+buzz/.travis.yml
+buzz/.vscode/
+buzz/include/
+buzz/test/
+
 # From PlatformIO
 
 .pio
