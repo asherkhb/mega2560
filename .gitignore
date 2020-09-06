@@ -16,6 +16,12 @@ buzz/.vscode/
 buzz/include/
 buzz/test/
 
+servo/.gitignore
+servo/.travis.yml
+servo/.vscode/
+servo/include/
+servo/test/
+
 # From PlatformIO
 
 .pio
