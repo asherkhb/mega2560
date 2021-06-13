@@ -22,6 +22,9 @@ servo/.vscode/
 servo/include/
 servo/test/
 
+LCD/.gitignore
+LCD/.vscode/
+
 # From PlatformIO
 
 .pio
