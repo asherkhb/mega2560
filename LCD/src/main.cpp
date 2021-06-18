@@ -13,33 +13,44 @@
 
 #include <Arduino.h>
 #include <LiquidCrystal.h>
+#include <MFRC522.h>
+#include <SPI.h>
 
-
-const int temp = 0; // Temp Analog Sensor Pin
 // Initialize LiquidCrystal LCD (16 pin w/ Hitachi HD44780 driver)
 const int rs = 7, en = 8, d4 = 9, d5 = 10, d6 = 11, d7 = 12;
 LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 
+// Initialize MFRC522 instance
+const int ss = 53, rst = 5; 
+MFRC522 mfrc522(ss, rst);
+
 void setup() {
   lcd.begin(16, 2);  // 16 col x 2 row LCD
-  lcd.setCursor(2, 0);
-  lcd.print("Temperature:");
-  lcd.setCursor(10, 1);
-  lcd.print("F");
+  lcd.setCursor(0, 0);
+  lcd.print("Badge Scanner:");
+
+  SPI.begin();
+  mfrc522.PCD_Init();
 }
 
 void loop() {
-  int tempReading = analogRead(temp);
+  lcd.setCursor(0, 1);
 
-  // Conversion from Elegoo lesson code (quality unknown)
-  double tempK = log(10000.0 * ((1024.0 / tempReading - 1)));
-  tempK = 1 / (0.001129148 + (0.000234125 + (0.0000000876741 * tempK * tempK )) * tempK );
-  float tempC = tempK - 273.15;
-  float tempF = (tempC * 9.0)/ 5.0 + 32.0;
+  // Look for new cards, and select one if present
+  if ( ! mfrc522.PICC_IsNewCardPresent() || ! mfrc522.PICC_ReadCardSerial() ) {
+    delay(50);
+    lcd.print("No Badge Present");
+    return;
+  }
 
-  lcd.setCursor(5, 1);
-  lcd.print(tempF);
-  
-  delay(500);
+  // Print UID
+  lcd.print("                ");  // Clear line
+  lcd.setCursor(0, 1);
+  for (byte i = 0; i < mfrc522.uid.size; i++) {
+    lcd.print(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " ");
+    lcd.print(mfrc522.uid.uidByte[i], HEX);
+  } 
+
+  delay(1000);
 }
 

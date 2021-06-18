@@ -25,6 +25,9 @@ servo/test/
 LCD/.gitignore
 LCD/.vscode/
 
+RFID/.gitignore
+RFID/.vscode/
+
 # From PlatformIO
 
 .pio
